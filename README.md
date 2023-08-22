@@ -150,6 +150,30 @@ Please make sure to commit this right before you start working on the task.
 After implementing the feature, commit your work using the following commands:
 `git add -A && git commit -m "Added notification for users when new post of favorite user is created" && git push`
 
+## 4. Import users
+
+We are looking for a swift method to import users into Chipper. The objective of this task is to develop a Laravel command that can retrieve a list of users from a public JSON file's URL and subsequently create a user for each element.
+
+The JSON file must follow the following structure: https://jsonplaceholder.typicode.com/users. Please use this URL during your development.
+
+Ensure that unit tests are provided for this feature.
+
+✋ **BEFORE YOU BEGIN**
+
+Please update the following line in this `README.md` file to include your estimate of the time required for completion.
+
+Estimated Time Required: [Your Estimate Here]
+
+After updating the estimate, commit your changes using the following command:
+`git add README.md && git commit -m "Task 4 estimated" && git push`
+
+Please make sure to commit this right before you start working on the task.
+
+🏁 **ONCE YOU HAVE COMPLETED THE TASK**
+
+After implementing the feature, commit your work using the following commands:
+`git add -A && git commit -m "Added command to import dummy users" && git push`
+
 # Ready for the next challenge?
 
 Congratulations! You completed the first part of this interview coding challenge. We'll now leave the API behind and enter the front-end realm.
