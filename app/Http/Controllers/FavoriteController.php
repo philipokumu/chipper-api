@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateFavoriteRequest;
+use App\Http\Resources\FavoriteResource;
 use Illuminate\Http\Response;
 
 /**
@@ -22,7 +23,9 @@ class FavoriteController extends Controller
 
     public function store(CreateFavoriteRequest $request, Post $post)
     {
-        $request->user()->favorites()->create(['post_id' => $post->id]);
+        $post->favoritedBy()->firstOrCreate([
+            'user_id' => $request->user()->id,
+        ]);
 
         return response()->noContent(Response::HTTP_CREATED);
     }
