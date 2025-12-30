@@ -17,8 +17,9 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function favoritedBy(): MorphMany
+    public function favorites(): MorphMany
     {
-        return $this->morphMany(Favorite::class, 'favoritable');
+        return $this->morphMany(Favorite::class, 'favoritable')
+                ->orWhere('post_id', $this->id);
     }
 }

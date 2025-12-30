@@ -17,13 +17,20 @@ class FavoriteController extends Controller
 {
     public function index(Request $request)
     {
-        $favorites = $request->user()->favorites;
-        return FavoriteResource::collection($favorites);
+        $favoritePosts = $request->user()->favoritePosts;
+        $favoriteUsers = $request->user()->favoriteUsers;
+
+        return response()->json([
+            'data' => [
+                'posts' => FavoriteResource::collection($favoritePosts),
+                'users' => FavoriteResource::collection($favoriteUsers)
+            ]
+        ]);
     }
 
     public function store(CreateFavoriteRequest $request, Post $post)
     {
-        $post->favoritedBy()->firstOrCreate([
+        $post->favorites()->firstOrCreate([
             'user_id' => $request->user()->id,
         ]);
 
@@ -32,7 +39,9 @@ class FavoriteController extends Controller
 
     public function destroy(Request $request, Post $post)
     {
-        $favorite = $request->user()->favorites()->where('post_id', $post->id)->firstOrFail();
+        $favorite = $post->favorites()
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
 
         $favorite->delete();
 

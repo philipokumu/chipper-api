@@ -63,4 +63,26 @@ class User extends Authenticatable
     {
         return $this->morphMany(Favorite::class, 'favoritable');
     }
+
+    public function favoritePosts()
+    {
+        return $this->morphedByMany(
+            Post::class,
+            'favoritable',
+            'favorites',
+            'user_id',
+            'favoritable_id'
+        );
+    }
+
+    public function favoriteUsers()
+    {
+        return $this->morphedByMany(
+            User::class,
+            'favoritable',
+            'favorites',
+            'user_id',
+            'favoritable_id'
+        );
+    }
 }
