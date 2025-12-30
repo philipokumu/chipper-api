@@ -4,12 +4,23 @@ namespace Tests\Feature;
 
 use Illuminate\Support\Arr;
 use App\Models\User;
+use App\Notifications\NewPostNotification;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class PostTest extends TestCase
 {
     use DatabaseMigrations;
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Notification::fake();
+    }
 
     public function test_a_guest_can_not_create_a_post()
     {
@@ -124,5 +135,26 @@ class PostTest extends TestCase
         $this->assertDatabaseMissing('posts', [
             'id' => $id,
         ]);
+    }
+
+    public function test_users_get_notification_when_favorited_author_creates_new_post()
+    {
+        $author = User::factory()->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        // Both users favorite the author
+        $this->actingAs($user1)->postJson(route('user.favorites.store', ['user' => $author]));
+        $this->actingAs($user2)->postJson(route('user.favorites.store', ['user' => $author]));
+
+        $response = $this->actingAs($author)->postJson(route('posts.store'), [
+            'title' => 'My title',
+            'body' => 'My body.',
+        ])->assertCreated();
+
+        Notification::assertSentTo([$user1, $user2], NewPostNotification::class);
+
+         // Assert notification NOT sent to author
+        Notification::assertNotSentTo($author, NewPostNotification::class);
     }
 }

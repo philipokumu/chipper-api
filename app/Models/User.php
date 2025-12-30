@@ -85,4 +85,15 @@ class User extends Authenticatable
             'favoritable_id'
         );
     }
+
+    public function favoritedByUsers()
+    {
+        return $this->morphedByMany(
+            User::class,
+            'favoritable',
+            'favorites',
+            'favoritable_id',
+            'user_id'
+        );
+    }
 }
