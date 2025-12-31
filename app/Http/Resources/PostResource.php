@@ -13,6 +13,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
+            'image_url' => $this->getFirstMediaUrl('gallery'),
             'user' => new UserResource($this->user),
         ];
     }

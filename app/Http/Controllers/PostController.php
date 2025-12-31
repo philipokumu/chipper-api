@@ -32,6 +32,13 @@ class PostController extends Controller
             'body' => $request->input('body'),
             'user_id' => $user->id,
         ]);
+        
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $post->addMediaFromRequest('image')
+                ->toMediaCollection('gallery');
+        }
 
         // Notify users who have favorited this author
         event(new AuthorAddedNewPost($user, $post));
