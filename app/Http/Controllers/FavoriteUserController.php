@@ -23,9 +23,8 @@ class FavoriteUserController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        $user->where('user_id', $request->user()->id)
-            ->where('favorited_id', $user->id)
-            ->where('favorited_type', User::class)
+        $user->favoritedBy()
+            ->where('user_id', $request->user()->id)
             ->delete();
 
         return response()->noContent();

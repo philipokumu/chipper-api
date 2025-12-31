@@ -95,6 +95,12 @@ class FavoriteTest extends TestCase
         $this->actingAs($user)
             ->deleteJson(route('user.favorites.destroy', ['user' => $userToFavorite]))
             ->assertNoContent();
+
+        $this->assertDatabaseMissing('favorites', [
+            'user_id' => $user->id,
+            'favoritable_id' => $userToFavorite->id,
+            'favoritable_type' => User::class,
+        ]);
     }
 
     public function test_user_cannot_favorite_a_post_twice()
